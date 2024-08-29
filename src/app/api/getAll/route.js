@@ -48,7 +48,7 @@ export async function POST(request) {
         const { temperature, humidity } = requestBody;
 
         const result = await client.query(
-            'UPDATE pn014 SET temperature = $1, humidity = $2 WHERE id = 1',
+            'UPDATE "CHANS004" SET temperature = $1, humidity = $2 WHERE id = 1',
             [temperature, humidity]
         );
 

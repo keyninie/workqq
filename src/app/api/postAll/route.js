@@ -10,6 +10,7 @@ const client = new Client({
     connectionString: process.env.DATABASE_URL,
 });
 
+
 // Connect to the database
 client.connect().catch((err) => {
     console.error("Database connection error:", err);
@@ -27,7 +28,7 @@ export async function POST(request) {
         const { temperature, humidity, ultrasonic, status } = requestBody;
 
         const result = await client.query(
-            'UPDATE pn014 SET temperature = $1, humidity = $2, ultrasonic = $3, status = $4 WHERE id = 1',
+            'UPDATE "CHANS004" SET temperature = $1, humidity = $2, ultrasonic = $3, status = $4 WHERE id = 1',
             [temperature, humidity, ultrasonic, status]
         );
 

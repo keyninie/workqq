@@ -39,9 +39,9 @@ export async function POST(req) {
         if (column) {
             // Update the latest record's column with the new state
             await client.query(
-                `UPDATE pn014
+                `UPDATE "CHANS004"
                  SET ${column} = $1
-                 WHERE id = (SELECT id FROM pn014 ORDER BY id DESC LIMIT 1)`,
+                 WHERE id = (SELECT id FROM "CHANS004" ORDER BY id DESC LIMIT 1)`,
                 [state] // Update the state value (e.g., "on" or "off")
             );
 
@@ -66,7 +66,7 @@ export async function POST(req) {
 
 export async function GET() {
     try {
-        const result = await client.query('SELECT * FROM "CHANS004"');
+        const result = await client.query('SELECT red,green FROM "CHANS004"');
         return new Response(JSON.stringify(result.rows), {
             status: 200,
             headers: {
