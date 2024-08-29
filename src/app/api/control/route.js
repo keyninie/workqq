@@ -66,7 +66,7 @@ export async function POST(req) {
 
 export async function GET() {
     try {
-        const result = await client.query('SELECT red, green FROM pn014');
+        const result = await client.query('SELECT * FROM "CHANS004"');
         return new Response(JSON.stringify(result.rows), {
             status: 200,
             headers: {
