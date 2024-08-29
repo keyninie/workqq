@@ -1,39 +1,85 @@
-export async function GET(request) {
-  // ตัวอย่างการรับค่าจาก query string
-  const { searchParams } = new URL(request.url);
-  const redStatus = searchParams.get('red') || 'off';
-  const greenStatus = searchParams.get('green') || 'off';
+"use server";
+import { Client } from 'pg';
+import dotenv from 'dotenv';
 
-  // คุณสามารถเก็บสถานะไฟใน database หรือ state ของโปรเจคก็ได้
-  // ในกรณีนี้เราจะตอบกลับสถานะที่ได้รับมา
-  return new Response(JSON.stringify({ red: redStatus, green: greenStatus }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+// Load environment variables
+dotenv.config();
+
+// Initialize PostgreSQL client
+const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+});
+
+// Connect to the database
+client.connect().catch((err) => {
+    console.error("Database connection error:", err);
+});
+
+const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+export async function POST(req) {
+    try {
+        const { led, state } = await req.json();
+        
+        // Validate 'led' and 'state' values
+        if (!led || !state) {
+            return new Response(JSON.stringify({ error: 'LED and state values are required' }), {
+                status: 400,
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+        }
+
+        // Get the column name based on the LED color
+        const column = led === "red" ? "red" : led === "green" ? "green" : null;
+
+        if (column) {
+            // Update the latest record's column with the new state
+            await client.query(
+                `UPDATE pn014
+                 SET ${column} = $1
+                 WHERE id = (SELECT id FROM pn014 ORDER BY id DESC LIMIT 1)`,
+                [state] // Update the state value (e.g., "on" or "off")
+            );
+
+            return new Response(JSON.stringify({ message: 'LED value updated successfully' }), {
+                status: 200,
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+        } else {
+            return new Response(JSON.stringify({ error: 'Invalid LED value' }), {
+                status: 400,
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            });
+        }
+    } catch (error) {
+        console.error("Error updating data:", error);
+        return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+    }
 }
 
-export async function POST(request) {
-  const { red, green } = await request.json();
-
-  // ส่งสถานะไฟไปยัง Raspberry Pi Pico ผ่าน HTTP request หรือ WebSocket
-  // ในตัวอย่างนี้เราจะแค่ตอบกลับสถานะที่ได้รับมา
-  return new Response(JSON.stringify({ red, green }), {
-    headers: { 'Content-Type': 'application/json' },
-  });
+export async function GET() {
+    try {
+        const result = await client.query('SELECT red, green FROM pn014');
+        return new Response(JSON.stringify(result.rows), {
+            status: 200,
+            headers: {
+                ...corsHeaders,
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
+            },
+        });
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+    }
 }
-
-async function toggleLED(redStatus, greenStatus) {
-  const response = await fetch('/api/toggleLight', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ red: redStatus, green: greenStatus }),
-  });
-
-  const result = await response.json();
-  console.log('Current LED Status:', result);
-}
-
-// ตัวอย่างการเรียกใช้ API
-toggleLED('on', 'off');
-
