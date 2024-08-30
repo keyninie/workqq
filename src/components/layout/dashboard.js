@@ -7,6 +7,7 @@ const Dashboard = () => {
   const [isLedOn, setIsLedOn] = useState(false);
   const [isLedGreenOn, setIsLedGreenOn] = useState(false);
   const [ultrasonic, setUltrasonic] = useState(0);
+  const [vibrationStatus, setVibrationStatus] = useState(false);
   const [latestId, setLatestId] = useState(null); // state to keep track of the latest ID
 
   useEffect(() => {
@@ -19,6 +20,7 @@ const Dashboard = () => {
         if (data.length > 0) {
           const latestData = data[data.length - 1];
           setUltrasonic(latestData.ultrasonic);
+          setVibrationStatus(latestData.vibration_status); // Add this line
 
           // Convert "on" to true and "off" to false
           setIsLedOn(latestData.red === "on");
@@ -113,6 +115,13 @@ const Dashboard = () => {
                 {ultrasonic !== null ? `${ultrasonic}cm` : "Loading..."}
               </p>
             </div>
+             {/* Vibration Status */}
+        <div className="bg-white shadow rounded-lg p-6">
+          <h2 className="text-lg font-medium text-gray-900">Vibration Status</h2>
+          <p className="mt-4 text-2xl font-bold text-gray-900">
+            {vibrationStatus !== null ? `${vibrationStatus}` : "Loading..."}
+          </p>
+        </div>
           </div>
         </div>
       </div>
