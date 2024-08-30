@@ -120,7 +120,7 @@ const Dashboard = () => {
             <div className="bg-white shadow rounded-lg p-6">
               <h2 className="text-lg font-medium text-gray-900">Temperature</h2>
               <p className="mt-4 text-2xl font-bold text-gray-900">
-                {temperature !== null ? `${temperature}cm` : "Loading..."}
+                {temperature !== null ? `${temperature}°C` : "Loading..."}
               </p>
             </div>
 
@@ -128,7 +128,7 @@ const Dashboard = () => {
             <div className="bg-white shadow rounded-lg p-6">
               <h2 className="text-lg font-medium text-gray-900">Humidity</h2>
               <p className="mt-4 text-2xl font-bold text-gray-900">
-                {humidity !== null ? `${humidity}cm` : "Loading..."}
+                {humidity !== null ? `${humidity}%` : "Loading..."}
               </p>
             </div>
           </div>
