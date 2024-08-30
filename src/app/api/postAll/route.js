@@ -21,6 +21,7 @@ const corsHeaders = {
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
+
 export async function POST(request) {
     try {
         const requestBody = await request.json(); // Parse the request body as JSON
