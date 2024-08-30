@@ -8,8 +8,8 @@ const Dashboard = () => {
   const [isLedGreenOn, setIsLedGreenOn] = useState(false);
   const [ultrasonic, setUltrasonic] = useState(null);
   const [latestId, setLatestId] = useState(null); // state to keep track of the latest ID
-  const [humidity, setHumidity] = useState(null)
-  const [temperature, setTemperature] = useState(null)
+  const [temperature, setTemperature] = useState(null);
+  const [humidity, setHumidity] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,13 +21,12 @@ const Dashboard = () => {
         if (data.length > 0) {
           const latestData = data[data.length - 1];
           setUltrasonic(latestData.ultrasonic);
+          setHumidity(latestData.humidity);
+          setTemperature(latestData.temperature);
 
           // Convert "on" to true and "off" to false
           setIsLedOn(latestData.red === "on");
           setIsLedGreenOn(latestData.green === "on");
-
-          setHumidity(latestData.humidity)
-          setTemperature(latestData.temperature)
 
           // Update latestId state only if the id is different
           if (latestData.id !== latestId) {
@@ -42,7 +41,7 @@ const Dashboard = () => {
     fetchData();
     const interval = setInterval(fetchData, 1000); // Fetch data every second
     return () => clearInterval(interval); // Clean up the interval on component unmount
-  }); // Update when latestId changes
+  }, [latestId]); // Update when latestId changes
 
   const sendLedState = async (ledColor, state) => {
     try {
@@ -116,20 +115,22 @@ const Dashboard = () => {
                 {ultrasonic !== null ? `${ultrasonic}cm` : "Loading..."}
               </p>
             </div>
-            {/* Vibration Status */}
+
+            {/* Ultrasonic Data */}
             <div className="bg-white shadow rounded-lg p-6">
               <h2 className="text-lg font-medium text-gray-900">Temperature</h2>
               <p className="mt-4 text-2xl font-bold text-gray-900">
-                {temperature !== null ? `${temperature}` : "Loading..."}
-              </p>
-            </div>
-            <div className="bg-white shadow rounded-lg p-6">
-              <h2 className="text-lg font-medium text-gray-900">Humidity</h2>
-              <p className="mt-4 text-2xl font-bold text-gray-900">
-                {humidity !== null ? `${humidity}` : "Loading..."}
+                {temperature !== null ? `${temperature}cm` : "Loading..."}
               </p>
             </div>
 
+            {/* Ultrasonic Data */}
+            <div className="bg-white shadow rounded-lg p-6">
+              <h2 className="text-lg font-medium text-gray-900">Humidity</h2>
+              <p className="mt-4 text-2xl font-bold text-gray-900">
+                {humidity !== null ? `${humidity}cm` : "Loading..."}
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -27,8 +27,8 @@ export async function POST(request) {
         const { ultrasonicValue, status } = requestBody;
 
         const result = await client.query(
-            'UPDATE "CHANS004" SET ultrasonic = $1, status = $2, vibration_status = $3, WHERE id = $1',
-            [ultrasonicValue, status, vibration_status, 1]
+            'UPDATE "CHANS004" SET ultrasonic = $1, status = $2 WHERE id = $3',
+            [ultrasonicValue, status, 1]
         );
 
         return new Response(JSON.stringify(result.rows), {

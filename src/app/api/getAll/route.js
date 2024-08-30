@@ -42,4 +42,29 @@ export async function GET() {
     }
 }
 
+export async function POST(request) {
+    try {
+        const requestBody = await request.json(); // Parse the request body as JSON
+        const { temperature, humidity } = requestBody;
 
+        const result = await client.query(
+            'UPDATE CHANS004 SET temperature = $1, humidity = $2 WHERE id = 1',
+            [temperature, humidity]
+        );
+
+        return new Response(JSON.stringify(result.rows), {
+            status: 200,
+            headers: {
+                ...corsHeaders,
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache"
+            },
+        });
+    } catch (error) {
+        console.error("Error updating data:", error);
+        return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+            status: 500,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+    }
+}

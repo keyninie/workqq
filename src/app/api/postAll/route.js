@@ -10,6 +10,7 @@ const client = new Client({
     connectionString: process.env.DATABASE_URL,
 });
 
+
 // Connect to the database
 client.connect().catch((err) => {
     console.error("Database connection error:", err);
@@ -24,12 +25,11 @@ const corsHeaders = {
 export async function POST(request) {
     try {
         const requestBody = await request.json(); // Parse the request body as JSON
-        const { ultrasonic, status, temperature,humidity } = requestBody;
+        const { ultrasonic, status, temperature, humidity } = requestBody;
 
-        // Ensure correct number of parameters
         const result = await client.query(
-            'UPDATE "CHANS004" SET ultrasonic = $1, status = $2, temperature = $3, humidity = $4 WHERE id = 1',
-            [ultrasonic, status, temperature, humidity] // Correct number of parameters
+            'UPDATE "CHANS004" SET ultrasonic = $1, status = $2, temperature = $3, humidity = $4  WHERE id = 1',
+            [ultrasonic, status, temperature, humidity]
         );
 
         return new Response(JSON.stringify(result.rows), {
