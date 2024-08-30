@@ -7,8 +7,9 @@ const Dashboard = () => {
   const [isLedOn, setIsLedOn] = useState(false);
   const [isLedGreenOn, setIsLedGreenOn] = useState(false);
   const [ultrasonic, setUltrasonic] = useState(0);
-  const [vibrationStatus, setVibrationStatus] = useState(false);
   const [latestId, setLatestId] = useState(null); // state to keep track of the latest ID
+  const [humidity, setHumidity] = useState(null)
+  const [temperature, setTemperature] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,11 +21,13 @@ const Dashboard = () => {
         if (data.length > 0) {
           const latestData = data[data.length - 1];
           setUltrasonic(latestData.ultrasonic);
-          setVibrationStatus(latestData.vibration_status); // Add this line
 
           // Convert "on" to true and "off" to false
           setIsLedOn(latestData.red === "on");
           setIsLedGreenOn(latestData.green === "on");
+
+          setHumidity(latestData.humidity)
+          setTemperature(latestData.temperature)
 
           // Update latestId state only if the id is different
           if (latestData.id !== latestId) {
@@ -85,9 +88,8 @@ const Dashboard = () => {
               </h2>
               <button
                 onClick={toggleLed}
-                className={`mt-4 px-4 py-2 rounded-md text-white ${
-                  isLedOn ? "bg-red-600" : "bg-green-600"
-                }`}
+                className={`mt-4 px-4 py-2 rounded-md text-white ${isLedOn ? "bg-red-600" : "bg-green-600"
+                  }`}
               >
                 {isLedOn ? "Turn Off LED" : "Turn On LED"}
               </button>
@@ -100,9 +102,8 @@ const Dashboard = () => {
               </h2>
               <button
                 onClick={toggleUltrasonic}
-                className={`mt-4 px-4 py-2 rounded-md text-white ${
-                  isLedGreenOn ? "bg-red-600" : "bg-green-600"
-                }`}
+                className={`mt-4 px-4 py-2 rounded-md text-white ${isLedGreenOn ? "bg-red-600" : "bg-green-600"
+                  }`}
               >
                 {isLedGreenOn ? "Turn Off LED" : "Turn On LED"}
               </button>
@@ -115,13 +116,20 @@ const Dashboard = () => {
                 {ultrasonic !== null ? `${ultrasonic}cm` : "Loading..."}
               </p>
             </div>
-             {/* Vibration Status */}
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-lg font-medium text-gray-900">Vibration Status</h2>
-          <p className="mt-4 text-2xl font-bold text-gray-900">
-            {vibrationStatus !== null ? `${vibrationStatus}` : "Loading..."}
-          </p>
-        </div>
+            {/* Vibration Status */}
+            <div className="bg-white shadow rounded-lg p-6">
+              <h2 className="text-lg font-medium text-gray-900">Temperature</h2>
+              <p className="mt-4 text-2xl font-bold text-gray-900">
+                {temperature !== null ? `${temperature}` : "Loading..."}
+              </p>
+            </div>
+            <div className="bg-white shadow rounded-lg p-6">
+              <h2 className="text-lg font-medium text-gray-900">Humidity</h2>
+              <p className="mt-4 text-2xl font-bold text-gray-900">
+                {humidity !== null ? `${humidity}` : "Loading..."}
+              </p>
+            </div>
+
           </div>
         </div>
       </div>
