@@ -29,7 +29,7 @@ export async function POST(request) {
 
         const result = await client.query(
             'UPDATE "CHANS004" SET ultrasonic = $1, status = $2, vibration_status = $3 WHERE id = 1',
-            [ultrasonic, status, vibration_status]
+            [ultrasonic, status, vibration_status,1]
         );
 
         console.log('Query Result:', result);
