@@ -6,7 +6,7 @@ const Dashboard = () => {
   // state management for LED, Ultrasonic, Temperature, and Humidity
   const [isLedOn, setIsLedOn] = useState(false);
   const [isLedGreenOn, setIsLedGreenOn] = useState(false);
-  const [ultrasonic, setUltrasonic] = useState(0);
+  const [ultrasonic, setUltrasonic] = useState(null);
   const [latestId, setLatestId] = useState(null); // state to keep track of the latest ID
   const [humidity, setHumidity] = useState(null)
   const [temperature, setTemperature] = useState(null)
@@ -42,7 +42,7 @@ const Dashboard = () => {
     fetchData();
     const interval = setInterval(fetchData, 1000); // Fetch data every second
     return () => clearInterval(interval); // Clean up the interval on component unmount
-  }, [latestId]); // Update when latestId changes
+  }); // Update when latestId changes
 
   const sendLedState = async (ledColor, state) => {
     try {
