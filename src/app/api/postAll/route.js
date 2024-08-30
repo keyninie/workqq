@@ -10,7 +10,6 @@ const client = new Client({
     connectionString: process.env.DATABASE_URL,
 });
 
-
 // Connect to the database
 client.connect().catch((err) => {
     console.error("Database connection error:", err);
@@ -27,12 +26,11 @@ export async function POST(request) {
         const requestBody = await request.json(); // Parse the request body as JSON
         const { ultrasonic, status, vibration_status } = requestBody;
 
+        // Ensure correct number of parameters
         const result = await client.query(
             'UPDATE "CHANS004" SET ultrasonic = $1, status = $2, vibration_status = $3 WHERE id = 1',
-            [ultrasonic, status, vibration_status,1]
+            [ultrasonic, status, vibration_status] // Correct number of parameters
         );
-
-        console.log('Query Result:', result);
 
         return new Response(JSON.stringify(result.rows), {
             status: 200,
