@@ -24,7 +24,7 @@ const corsHeaders = {
 
 export async function GET() {
     try {
-        const result = await client.query('SELECT ultrasonic, red, green, vibration_status FROM "CHANS004"');
+        const result = await client.query('SELECT ultrasonic, red, green, temperature, humidity FROM "CHANS004"');
         return new Response(JSON.stringify(result.rows), {
             status: 200,
             headers: {
