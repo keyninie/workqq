@@ -6,8 +6,6 @@ const Dashboard = () => {
   // state management for LED, Ultrasonic, Temperature, and Humidity
   const [isLedOn, setIsLedOn] = useState(false);
   const [isLedGreenOn, setIsLedGreenOn] = useState(false);
-  const [temperature, setTemperature] = useState(null);
-  const [humidity, setHumidity] = useState(null);
   const [ultrasonic, setUltrasonic] = useState(0);
   const [latestId, setLatestId] = useState(null); // state to keep track of the latest ID
 
@@ -20,8 +18,6 @@ const Dashboard = () => {
 
         if (data.length > 0) {
           const latestData = data[data.length - 1];
-          setTemperature(latestData.temperature);
-          setHumidity(latestData.humidity);
           setUltrasonic(latestData.ultrasonic);
 
           // Convert "on" to true and "off" to false
@@ -108,22 +104,6 @@ const Dashboard = () => {
               >
                 {isLedGreenOn ? "Turn Off LED" : "Turn On LED"}
               </button>
-            </div>
-
-            {/* Temperature Data */}
-            <div className="bg-white shadow rounded-lg p-6">
-              <h2 className="text-lg font-medium text-gray-900">Temperature</h2>
-              <p className="mt-4 text-2xl font-bold text-gray-900">
-                {temperature !== null ? `${temperature}°C` : "Loading..."}
-              </p>
-            </div>
-
-            {/* Humidity Data */}
-            <div className="bg-white shadow rounded-lg p-6">
-              <h2 className="text-lg font-medium text-gray-900">Humidity</h2>
-              <p className="mt-4 text-2xl font-bold text-gray-900">
-                {humidity !== null ? `${humidity}%` : "Loading..."}
-              </p>
             </div>
 
             {/* Ultrasonic Data */}

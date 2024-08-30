@@ -19,7 +19,7 @@ const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
-};
+}; 
 
 export async function POST(request) {
     try {
@@ -27,7 +27,7 @@ export async function POST(request) {
         const { ultrasonicValue, status } = requestBody;
 
         const result = await client.query(
-            'UPDATE CHANS004 SET ultrasonic = $1, status = $2 WHERE id = $3',
+            'UPDATE "CHANS004" SET ultrasonic = $1, status = $2 WHERE id = $3',
             [ultrasonicValue, status, 1]
         );
 
