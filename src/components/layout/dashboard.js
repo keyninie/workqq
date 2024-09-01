@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import Logo from "@/components/ui/logo";
 
 const Dashboard = () => {
-  // state management for LED, Ultrasonic, Temperature, and Humidity
+  // state management for LED, Ultrasonic, Temperature, Humidity, and Raindrop
   const [isLedOn, setIsLedOn] = useState(false);
   const [isLedGreenOn, setIsLedGreenOn] = useState(false);
   const [ultrasonic, setUltrasonic] = useState(null);
   const [latestId, setLatestId] = useState(null); // state to keep track of the latest ID
   const [temperature, setTemperature] = useState(null);
   const [humidity, setHumidity] = useState(null);
+  const [raindrop, setRaindrop] = useState(null); // New state for raindrop data
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +24,7 @@ const Dashboard = () => {
           setUltrasonic(latestData.ultrasonic);
           setHumidity(latestData.humidity);
           setTemperature(latestData.temperature);
+          setRaindrop(latestData.raindrop_value); // Set the raindrop data
 
           // Convert "on" to true and "off" to false
           setIsLedOn(latestData.red === "on");
@@ -116,7 +118,7 @@ const Dashboard = () => {
               </p>
             </div>
 
-            {/* Ultrasonic Data */}
+            {/* Temperature Data */}
             <div className="bg-white shadow rounded-lg p-6">
               <h2 className="text-lg font-medium text-gray-900">Temperature</h2>
               <p className="mt-4 text-2xl font-bold text-gray-900">
@@ -124,11 +126,19 @@ const Dashboard = () => {
               </p>
             </div>
 
-            {/* Ultrasonic Data */}
+            {/* Humidity Data */}
             <div className="bg-white shadow rounded-lg p-6">
               <h2 className="text-lg font-medium text-gray-900">Humidity</h2>
               <p className="mt-4 text-2xl font-bold text-gray-900">
                 {humidity !== null ? `${humidity}%` : "Loading..."}
+              </p>
+            </div>
+
+            {/* Raindrop Data */}
+            <div className="bg-white shadow rounded-lg p-6">
+              <h2 className="text-lg font-medium text-gray-900">Raindrop</h2>
+              <p className="mt-4 text-2xl font-bold text-gray-900">
+                {raindrop !== null ? `${raindrop}` : "Loading..."}
               </p>
             </div>
           </div>
